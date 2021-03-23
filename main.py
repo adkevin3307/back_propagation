@@ -18,28 +18,25 @@ class Net:
     def forward(self, x: np.ndarray) -> np.ndarray:
         x = self.linear_1.forward(x)
         x = nn.Sigmoid.forward(x)
-        self.layer_1 = x
 
         x = self.linear_2.forward(x)
         x = nn.Sigmoid.forward(x)
-        self.layer_2 = x
 
         x = self.linear_3.forward(x)
         x = nn.Sigmoid.forward(x)
-        self.layer_3 = x
 
         return x
 
     def backward(self, input: np.ndarray, target: np.ndarray) -> None:
         dx = self.criterion.backward(input, target)
 
-        dx = np.multiply(dx, nn.Sigmoid.backward(self.layer_3))
+        dx = nn.Sigmoid.backward(dx)
         dx = self.linear_3.backward(dx)
 
-        dx = np.multiply(dx, nn.Sigmoid.backward(self.layer_2))
+        dx = nn.Sigmoid.backward(dx)
         dx = self.linear_2.backward(dx)
 
-        dx = np.multiply(dx, nn.Sigmoid.backward(self.layer_1))
+        dx = nn.Sigmoid.backward(dx)
         dx = self.linear_1.backward(dx)
 
     def update(self, lr: float) -> None:
