@@ -22,26 +22,38 @@ class Linear:
 
 
 class Sigmoid:
-    @staticmethod
-    def forward(x: np.ndarray) -> np.ndarray:
-        return 1.0 / (1.0 + np.exp(-x))
+    x_prev = []
 
     @staticmethod
-    def backward(x: np.ndarray) -> np.ndarray:
-        return np.multiply(x, 1.0 - x)
+    def forward(x: np.ndarray) -> np.ndarray:
+        Sigmoid.x_prev.append(1.0 / (1.0 + np.exp(-x)))
+
+        return Sigmoid.x_prev[-1]
+
+    @staticmethod
+    def backward(grad_prev: np.ndarray) -> np.ndarray:
+        x_prev = Sigmoid.x_prev.pop()
+
+        return grad_prev * np.multiply(x_prev, 1.0 - x_prev)
 
 
 class ReLU:
+    x_prev = []
+
     @staticmethod
     def forward(x: np.ndarray) -> np.ndarray:
+        ReLU.x_prev.append(x)
+
         return np.maximum(0, x)
 
     @staticmethod
-    def backward(x: np.ndarray) -> np.ndarray:
-        temp = np.array(x, copy=True)
-        temp[x <= 0] = 0
+    def backward(grad_prev: np.ndarray) -> np.ndarray:
+        x_prev = ReLU.x_prev.pop()
 
-        return temp
+        dx = np.array(grad_prev, copy=True)
+        dx[x_prev <= 0] = 0
+
+        return dx
 
 
 class MSE:
