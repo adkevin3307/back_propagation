@@ -121,7 +121,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.dataset == 'linear':
-        X_train, Y_train = generate_linear(n=1000)
+        X_train, Y_train = generate_linear(n=100)
         X_test, Y_test = generate_linear(n=100)
     elif args.dataset == 'xor':
         X_train, Y_train = generate_XOR_easy()
