@@ -42,16 +42,16 @@ class ReLU:
 
     @staticmethod
     def forward(x: np.ndarray) -> np.ndarray:
-        ReLU.x_prev.append(x)
+        ReLU.x_prev.append(np.maximum(0, x))
 
-        return np.maximum(0, x)
+        return ReLU.x_prev[-1]
 
     @staticmethod
     def backward(grad_prev: np.ndarray) -> np.ndarray:
         x_prev = ReLU.x_prev.pop()
 
         dx = np.array(grad_prev, copy=True)
-        dx[x_prev <= 0] = 0
+        dx[x_prev == 0] = 0
 
         return dx
 
