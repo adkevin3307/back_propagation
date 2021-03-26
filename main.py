@@ -6,8 +6,10 @@ from Model import Model
 from utils import parse, generate_linear, generate_XOR_easy, show_history, show_result
 
 
-class Net:
+class Net(nn.Module):
     def __init__(self) -> None:
+        super(Net, self).__init__()
+
         self.linear_1 = nn.Linear(in_features=2, out_features=16)
         self.linear_2 = nn.Linear(in_features=16, out_features=32)
         self.linear_3 = nn.Linear(in_features=32, out_features=1)
@@ -23,9 +25,6 @@ class Net:
         x = nn.Sigmoid.forward(x)
 
         return x
-
-    def parameters(self) -> np.ndarray:
-        return np.array([self.linear_1, self.linear_2, self.linear_3])
 
 
 if __name__ == '__main__':

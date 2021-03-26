@@ -1,5 +1,6 @@
 import numpy as np
 from typing import Any, Union
+from collections import OrderedDict
 
 import grad
 
@@ -21,6 +22,26 @@ class Autograd:
     @staticmethod
     def popable() -> bool:
         return (len(Autograd.layers) > 0)
+
+
+class Module:
+    def __init__(self) -> None:
+        self._parameters = OrderedDict()
+
+    def __setattr__(self, name: str, value: Union[np.ndarray, 'Module']) -> None:
+        params = self.__dict__.get('_parameters')
+
+        if params == None:
+            object.__setattr__(self, name, value)
+        else:
+            self.__dict__[name] = value
+            self._parameters[name] = value
+
+    def parameters(self) -> OrderedDict:
+        return self._parameters
+
+    def forward(self) -> None:
+        raise NotImplementedError('Forward Not Implemented')
 
 
 class Linear:
