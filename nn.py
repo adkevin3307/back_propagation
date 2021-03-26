@@ -33,7 +33,6 @@ class Linear:
 
         if grad.gradable():
             layer = {}
-            layer['updatable'] = True
             layer['x_prev'] = np.array(x, copy=True)
             layer['backward'] = self.backward
 
@@ -46,9 +45,6 @@ class Linear:
 
         return np.dot(grad_prev, self.weight.T)
 
-    def update(self, lr: float) -> None:
-        self.weight -= lr * self.grad_weight
-
 
 class Sigmoid:
     @staticmethod
@@ -57,7 +53,6 @@ class Sigmoid:
 
         if grad.gradable():
             layer = {}
-            layer['updatable'] = False
             layer['x_prev'] = np.array(x, copy=True)
             layer['backward'] = Sigmoid.backward
 
@@ -77,7 +72,6 @@ class ReLU:
 
         if grad.gradable():
             layer = {}
-            layer['updatable'] = False
             layer['x_prev'] = np.array(x, copy=True)
             layer['backward'] = ReLU.backward
 

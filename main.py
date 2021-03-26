@@ -1,6 +1,7 @@
 import numpy as np
 
 import nn
+import optim
 from Model import Model
 from utils import parse, generate_linear, generate_XOR_easy, show_history, show_result
 
@@ -23,10 +24,8 @@ class Net:
 
         return x
 
-    def update(self, lr: float) -> None:
-        self.linear_1.update(lr)
-        self.linear_2.update(lr)
-        self.linear_3.update(lr)
+    def parameters(self) -> np.ndarray:
+        return np.array([self.linear_1, self.linear_2, self.linear_3])
 
 
 if __name__ == '__main__':
@@ -46,9 +45,10 @@ if __name__ == '__main__':
     net = Net()
 
     criterion = nn.MSE()
+    optimizer = optim.SGD(net.parameters(), lr=args.lr, momentum=args.momentum)
 
-    model = Model(net, criterion)
-    train_history = model.train(X_train, Y_train, epochs=args.epochs, lr=args.lr)
+    model = Model(net, criterion, optimizer)
+    train_history = model.train(X_train, Y_train, epochs=args.epochs)
     test_history = model.test(X_test, Y_test)
 
     show_history(train_history)

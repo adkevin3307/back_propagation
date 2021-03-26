@@ -4,11 +4,12 @@ import grad
 
 
 class Model:
-    def __init__(self, net, criterion) -> None:
+    def __init__(self, net, criterion, optimizer) -> None:
         self.net = net
         self.criterion = criterion
+        self.optimizer = optimizer
 
-    def train(self, X_train: np.ndarray, Y_train: np.ndarray, epochs: int, lr: float = 1e-3) -> dict:
+    def train(self, X_train: np.ndarray, Y_train: np.ndarray, epochs: int) -> dict:
         history = {'accuracy': [], 'loss': []}
 
         length = len(str(epochs))
@@ -28,7 +29,7 @@ class Model:
                 total_loss += loss
 
                 self.criterion.backward(y_hat, y)
-                self.net.update(lr)
+                self.optimizer.step()
 
                 current_progress = (i + 1) / len(train_loader) * 100
                 progress_bar = '=' * int((i + 1) * (20 / len(train_loader)))

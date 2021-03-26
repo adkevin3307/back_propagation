@@ -9,6 +9,7 @@ def parse() -> argparse.Namespace:
     parser.add_argument('-d', '--dataset', type=str, default='linear')
     parser.add_argument('-e', '--epochs', type=int, default=500)
     parser.add_argument('-l', '--lr', type=float, default=1e-3)
+    parser.add_argument('-m', '--momentum', type=float, default=0.0)
 
     args = parser.parse_args()
 
