@@ -50,7 +50,12 @@ if __name__ == '__main__':
     else:
         raise RuntimeError('Criterion Not Found')
 
-    optimizer = optim.SGD(net.parameters(), lr=args.lr, momentum=args.momentum)
+    if args.optimizer == 'sgd':
+        optimizer = optim.SGD(net.parameters(), lr=args.lr, momentum=args.momentum)
+    elif args.optimizer == 'adagrad':
+        optimizer = optim.Adagrad(net.parameters(), lr=args.lr)
+    else:
+        raise RuntimeError('Optimizer Not Found')
 
     model = Model(net, criterion, optimizer)
     train_history = model.train(X_train, Y_train, epochs=args.epochs)
