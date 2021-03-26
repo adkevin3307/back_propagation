@@ -34,8 +34,16 @@ class Module:
         if params == None:
             object.__setattr__(self, name, value)
         else:
-            self.__dict__[name] = value
             self._parameters[name] = value
+
+    def __getattr__(self, name: str) -> Union[np.ndarray, 'Module']:
+        if '_parameters' in self.__dict__:
+            _parameters = self.__dict__['_parameters']
+
+            if name in _parameters:
+                return _parameters[name]
+
+        raise AttributeError(f'{type(self).__name__} Object Has No Attribute {name}')
 
     def parameters(self) -> OrderedDict:
         return self._parameters
