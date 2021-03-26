@@ -43,8 +43,8 @@ class Linear:
 
         return np.dot(grad_prev, self.weight.T)
 
-    def update(self, learning_rate: float) -> None:
-        self.weight -= learning_rate * self.grad_weight
+    def update(self, lr: float) -> None:
+        self.weight -= lr * self.grad_weight
 
 
 class Sigmoid:
