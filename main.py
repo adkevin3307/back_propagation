@@ -44,7 +44,13 @@ if __name__ == '__main__':
 
     net = Net()
 
-    criterion = nn.MSE()
+    if args.criterion == 'mse':
+        criterion = nn.MSE()
+    elif args.criterion == 'crossentropy':
+        criterion = nn.CrossEntropy()
+    else:
+        raise RuntimeError('Criterion Not Found')
+
     optimizer = optim.SGD(net.parameters(), lr=args.lr, momentum=args.momentum)
 
     model = Model(net, criterion, optimizer)
