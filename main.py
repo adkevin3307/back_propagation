@@ -1,5 +1,4 @@
 import numpy as np
-from typing import Union
 
 import nn
 from Model import Model
@@ -7,9 +6,7 @@ from utils import parse, generate_linear, generate_XOR_easy, show_history, show_
 
 
 class Net:
-    def __init__(self, criterion: Union[nn.MSE, nn.CrossEntropy]):
-        self.criterion = criterion
-
+    def __init__(self):
         self.linear_1 = nn.Linear(in_features=2, out_features=16)
         self.linear_2 = nn.Linear(in_features=16, out_features=32)
         self.linear_3 = nn.Linear(in_features=32, out_features=1)
@@ -25,18 +22,6 @@ class Net:
         x = nn.Sigmoid.forward(x)
 
         return x
-
-    def backward(self, input: np.ndarray, target: np.ndarray) -> None:
-        dx = self.criterion.backward(input, target)
-
-        dx = nn.Sigmoid.backward(dx)
-        dx = self.linear_3.backward(dx)
-
-        dx = nn.Sigmoid.backward(dx)
-        dx = self.linear_2.backward(dx)
-
-        dx = nn.Sigmoid.backward(dx)
-        dx = self.linear_1.backward(dx)
 
     def update(self, lr: float) -> None:
         self.linear_1.update(lr)
@@ -58,10 +43,11 @@ if __name__ == '__main__':
     else:
         raise RuntimeError('Dataset Not Found')
 
-    criterion = nn.MSE()
-    net = Net(criterion=criterion)
+    net = Net()
 
-    model = Model(net)
+    criterion = nn.MSE()
+
+    model = Model(net, criterion)
     train_history = model.train(X_train, Y_train, epochs=args.epochs, lr=args.lr)
     test_history = model.test(X_test, Y_test)
 

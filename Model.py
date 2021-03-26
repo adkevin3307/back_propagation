@@ -1,9 +1,12 @@
 import numpy as np
 
+import grad
+
 
 class Model:
-    def __init__(self, net) -> None:
+    def __init__(self, net, criterion) -> None:
         self.net = net
+        self.criterion = criterion
 
     def train(self, X_train: np.ndarray, Y_train: np.ndarray, epochs: int, lr: float = 1e-3) -> dict:
         history = {'accuracy': [], 'loss': []}
@@ -21,10 +24,10 @@ class Model:
 
                 correct += np.sum(np.around(y_hat).astype(np.int32) == y)
 
-                loss = self.net.criterion.forward(y_hat, y)
+                loss = self.criterion.forward(y_hat, y)
                 total_loss += loss
 
-                self.net.backward(y_hat, y)
+                self.criterion.backward(y_hat, y)
                 self.net.update(lr)
 
                 current_progress = (i + 1) / len(train_loader) * 100
@@ -50,20 +53,21 @@ class Model:
         predict = []
         correct = 0
         total_loss = 0.0
-        for i, (x, y) in enumerate(test_loader):
-            x, y = np.array(x).reshape(1, -1), np.array(y)
+        with grad.no_grad():
+            for i, (x, y) in enumerate(test_loader):
+                x, y = np.array(x).reshape(1, -1), np.array(y)
 
-            y_hat = self.net.forward(x)
-            predict.append(y_hat)
+                y_hat = self.net.forward(x)
+                predict.append(y_hat)
 
-            correct += np.sum(np.around(y_hat).astype(np.int32) == y)
+                correct += np.sum(np.around(y_hat).astype(np.int32) == y)
 
-            loss = self.net.criterion.forward(y_hat, y)
-            total_loss += loss
+                loss = self.criterion.forward(y_hat, y)
+                total_loss += loss
 
-            current_progress = (i + 1) / len(test_loader) * 100
-            progress_bar = '=' * int((i + 1) * (20 / len(test_loader)))
-            print(f'\rTest: [{progress_bar:<20}] {current_progress:6.2f}%, loss: {loss:.3f}', end='')
+                current_progress = (i + 1) / len(test_loader) * 100
+                progress_bar = '=' * int((i + 1) * (20 / len(test_loader)))
+                print(f'\rTest: [{progress_bar:<20}] {current_progress:6.2f}%, loss: {loss:.3f}', end='')
 
         total_loss /= len(test_loader)
         accuracy = correct / len(test_loader)
