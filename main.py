@@ -6,7 +6,7 @@ from utils import parse, generate_linear, generate_XOR_easy, show_history, show_
 
 
 class Net:
-    def __init__(self):
+    def __init__(self) -> None:
         self.linear_1 = nn.Linear(in_features=2, out_features=16)
         self.linear_2 = nn.Linear(in_features=16, out_features=32)
         self.linear_3 = nn.Linear(in_features=32, out_features=1)

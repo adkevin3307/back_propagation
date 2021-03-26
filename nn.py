@@ -1,5 +1,5 @@
 import numpy as np
-from typing import Any
+from typing import Any, Union
 
 import grad
 
@@ -12,8 +12,11 @@ class Autograd:
         Autograd.layers.append(layer)
 
     @staticmethod
-    def pop() -> dict[str, Any]:
-        return Autograd.layers.pop()
+    def pop() -> Union[dict[str, Any], None]:
+        if Autograd.popable():
+            return Autograd.layers.pop()
+
+        return None
 
     @staticmethod
     def popable() -> bool:
