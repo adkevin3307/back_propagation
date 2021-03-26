@@ -26,9 +26,10 @@ class Sigmoid:
 
     @staticmethod
     def forward(x: np.ndarray) -> np.ndarray:
-        Sigmoid.x_prev.append(1.0 / (1.0 + np.exp(-x)))
+        x = 1.0 / (1.0 + np.exp(-x))
+        Sigmoid.x_prev.append(x)
 
-        return Sigmoid.x_prev[-1]
+        return x
 
     @staticmethod
     def backward(grad_prev: np.ndarray) -> np.ndarray:
@@ -42,9 +43,10 @@ class ReLU:
 
     @staticmethod
     def forward(x: np.ndarray) -> np.ndarray:
-        ReLU.x_prev.append(np.maximum(0, x))
+        x = np.maximum(0, x)
+        ReLU.x_prev.append(x)
 
-        return ReLU.x_prev[-1]
+        return x
 
     @staticmethod
     def backward(grad_prev: np.ndarray) -> np.ndarray:
@@ -59,18 +61,18 @@ class ReLU:
 class MSE:
     @staticmethod
     def forward(input: np.ndarray, target: np.ndarray) -> float:
-        return np.sum(np.square(input - target)) / len(input)
+        return np.sum(np.square(input - target)) / input.shape[0]
 
     @staticmethod
     def backward(input: np.ndarray, target: np.ndarray) -> np.ndarray:
-        return 2.0 * (input - target) / len(input)
+        return 2.0 * (input - target) / input.shape[0]
 
 
 class CrossEntropy:
     @staticmethod
     def forward(input: np.ndarray, target: np.ndarray) -> float:
-        return -1.0 * np.sum(target * np.log(input) + (1.0 - target) * np.log(1.0 - input)) / len(input)
+        return -1.0 * np.sum(target * np.log(input) + (1.0 - target) * np.log(1.0 - input)) / input.shape[0]
 
     @staticmethod
     def backward(input: np.ndarray, target: np.ndarray) -> np.ndarray:
-        return ((1 - target) / (1 - input) - (target / input)) / len(input)
+        return ((1 - target) / (1 - input) - (target / input)) / input.shape[0]
