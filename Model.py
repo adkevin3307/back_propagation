@@ -21,7 +21,7 @@ class Model:
             for i, (x, y) in enumerate(train_loader):
                 x, y = np.array(x).reshape(1, -1), np.array(y)
 
-                y_hat = self.net.forward(x)
+                y_hat = self.net(x)
 
                 correct += np.sum(np.around(y_hat).astype(np.int32) == y)
 

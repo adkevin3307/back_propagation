@@ -1,6 +1,6 @@
 import numpy as np
-from typing import Any, Union
 from collections import OrderedDict
+from typing import Any, Union, Callable
 
 import grad
 
@@ -44,6 +44,13 @@ class Module:
                 return _parameters[name]
 
         raise AttributeError(f'{type(self).__name__} Object Has No Attribute {name}')
+
+    def _call_impl(self, *input, **kwargs):
+        result = self.forward(*input, **kwargs)
+
+        return result
+
+    __call__: Callable[..., Any] = _call_impl
 
     def parameters(self) -> OrderedDict:
         return self._parameters
