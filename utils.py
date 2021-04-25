@@ -45,7 +45,7 @@ def generate_XOR_easy() -> tuple[np.ndarray, np.ndarray]:
 
 
 def show_history(history: dict) -> None:
-    _, axes = plt.subplots()
+    figure, axes = plt.subplots()
 
     axes.plot(history['loss'], color='blue')
     axes.set_ylabel('Loss', color='blue', fontsize=14)
@@ -55,6 +55,7 @@ def show_history(history: dict) -> None:
     axes.plot(history['accuracy'], color='red')
     axes.set_ylabel('Accuracy', color='red', fontsize=14)
 
+    figure.tight_layout()
     plt.show()
 
 
